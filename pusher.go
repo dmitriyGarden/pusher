@@ -1,13 +1,19 @@
 package pusher
 
 import (
+	"encoding/json"
 	"github.com/streadway/amqp"
 	"log"
 )
 
+type Payload struct {
+	Topic   string      `json:"topic"`
+	Payload interface{} `json:"payload"`
+}
+
 type Message struct {
 	Uid     string
-	Payload []byte
+	Payload Payload
 }
 
 type QueueConfig interface {
@@ -65,9 +71,13 @@ func (q *Pusher) processing(stopCH chan struct{}) error {
 		case err := <-closedCH:
 			return err
 		case msg := <-q.writeCH:
-			err := ch.Publish(q.exchange, "", false, false, amqp.Publishing{
+			body, err := json.Marshal(msg.Payload)
+			if err != nil {
+				log.Println(q.LogPrefix, err)
+			}
+			err = ch.Publish(q.exchange, "", false, false, amqp.Publishing{
 				CorrelationId: msg.Uid,
-				Body:          msg.Payload,
+				Body:          body,
 			})
 			if err != nil {
 				log.Println(q.LogPrefix, "publish", err)

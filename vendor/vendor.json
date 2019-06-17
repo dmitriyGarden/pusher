@@ -1,0 +1,13 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "M9Vpq0g1nLqfEjll3PNZ/yz8gZY=",
+			"path": "github.com/streadway/amqp",
+			"revision": "75d898a42a940fbc854dfd1a4199eabdc00cf024",
+			"revisionTime": "2019-04-04T07:53:20Z"
+		}
+	],
+	"rootPath": "github.com/dmitriyGarden/pusher"
+}
